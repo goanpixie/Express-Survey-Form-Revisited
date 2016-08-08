@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type ="text/javascript">
+            $(document).ready(function (){
+                // this triggers the connection event in our server!
+                var socket = io.connect();
+
+                $('.btn').click(function (){
+                  var name= $('#name').val();
+                  var location= $('#location').val();
+                  var language= $('#language').val();
+                  var comment= $('#comment').val();
+
+
+                  socket.emit("form_submitted",
+                  {name:name, location:location, language:language,comment:comment});
+                });
+
+                socket.on('info',function(data,random){
+
+                  console.log("We are here")
+                $(".statement").html("You emitted the following information to the server " +"{name:" +data.name
+                +",location: " +data.location+ ",language: " +data.language + ",comment: "+data.comment+"}" +"<br />" +"Your lucky number emitted by the server is:"+random);
+
+              });
+
+        })
+        </script>
+
+        <style>
+div {background-color: green;}
+
+</style>
+  </head>
+
+
+    <body>
+      <div class="statement">
+      </div>
+
+
+          Your Name: <input id="name" type='text' name='name'><br />
+          Dojo Location:
+          <select id="location">
+            <option value="Mountain View">Mountain View</option>
+            <option value="Seattle">Seattle</option>
+          </select><br />
+          Favorite Language:
+          <select id="language">
+            <option value="Javascript">Javascript</option>
+            <option value="Python">Python</option><br />
+          </select><br />
+          Comment:<input id="comment" type='text' name='comment'><br />
+          <button class="btn">submit</button>
+
+  </body>
+</html>
